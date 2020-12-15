@@ -1,7 +1,10 @@
-# Teardown---Directional-Gravity-Lift---__with-user-friendly-setup-and-configurations-through-XML__
-Teardown - Directional Gravity Lift
+# Teardown - Directional-Gravity-Lift
+## (User friendly setup and configurations through XML)
 
-### Development Log
+<br>
+<br>
+## Development Log
+
 * main - 1.5 grav lift works with all shapes within its bounds
 * main - 1.4 withinCylinder works thanks to thomasims for the function
 * main - 1.3 vecdot gets closest point to line
