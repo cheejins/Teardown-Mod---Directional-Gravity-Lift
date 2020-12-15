@@ -1,4 +1,4 @@
-# Teardown - Directional Gravity Lift
+# Teardown Mod - Directional Gravity Lift
 Features user-friendly setup and configurations all through XML
 
 <br>
