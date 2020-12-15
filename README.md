@@ -3,8 +3,8 @@
 
 <br>
 <br>
-## Development Log
 
+Development Log
 * main - 1.5 grav lift works with all shapes within its bounds
 * main - 1.4 withinCylinder works thanks to thomasims for the function
 * main - 1.3 vecdot gets closest point to line
