@@ -1,5 +1,5 @@
 # Teardown Mod - Directional Gravity Lift
-Features user-friendly setup and configurations all through XML
+Features user-friendly setup and configurations done purely through the map's XML config.
 
 <br>
 
