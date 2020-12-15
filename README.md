@@ -1,5 +1,5 @@
 # Teardown - Directional-Gravity-Lift
-## (User friendly setup and configurations through XML)
+Features user-friendly setup and configurations all through XML
 
 <br>
 <br>
