@@ -2,7 +2,6 @@
 Features user-friendly setup and configurations all through XML
 
 <br>
-<br>
 
 Development Log
 * main - 1.5 grav lift works with all shapes within its bounds
