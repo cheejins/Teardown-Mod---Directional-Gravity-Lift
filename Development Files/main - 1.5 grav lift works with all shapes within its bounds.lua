@@ -45,27 +45,6 @@ local _gv = {}
     _gv.objectJustEnteredBounds = false
 
 
-    -- Returns the gravlift's transform. Can return with added vectors to pos and rot.
-    _gv.getBaseTransform = function(addPos, addRot)
-        local pos = VecAdd(GetBodyTransform(_gv.body).pos, addPos or Vec(0,0,0))
-        local rot = QuatLookAt(_gv.startPos, _gv.endPos)
-        return Transform(pos, rot)
-    end
-
-    --- Moves player off of the ground by 1 vox. Needed to make SetPlayerVelocity() work.
-    _gv.objectBumpUp = function()
-        local bumpUpTransform = Transform(
-            VecAdd(GetPlayerTransform().pos, Vec(0, 0.2, 0)), GetCameraTransform().rot)
-            SetPlayerTransform(bumpUpTransform)
-            SetCameraTransform(bumpUpTransform)
-        end
-
-    --- Returns the push direction of the gravlift scaled to 
-    _gv.getDirectionalVelocity = function()
-        return VecScale(VecNormalize(VecSub(_gv.startPos, _gv.endPos)), -_gv.velocity)
-    end
-
-
     -- big thanks to "Thomasims" for this function.
     function withinCylinder(cstart, cend, radius, pos)
         local cdiff = VecSub(cend, cstart)
@@ -77,30 +56,64 @@ local _gv = {}
         return VecLength(VecSub(pdiff, VecScale(cdir, pdot))) < radius
     end
 
-    
+
+    -- Returns the gravlift's transform. Can return with vector added to pos.
+    _gv.getBaseTransform = function(addPos)
+            local pos = VecAdd(GetBodyTransform(_gv.body).pos, addPos or Vec(0,0,0))
+            local rot = QuatLookAt(_gv.startPos, _gv.endPos)
+            return Transform(pos, rot)
+        end
+
+
+    --- Returns the push direction of the gravlift scaled to 
+    _gv.getDirectionalVelocity = function()
+            return VecScale(VecNormalize(VecSub(_gv.startPos, _gv.endPos)), -_gv.velocity)
+        end
+
+
+
 function runGravlift(gv)
 
-    -- local hit = QueryRaycast(Vec(0, 100, 0), Vec(0, -1, 0), 100)
+    local list = QueryAabbShapes(gv.startPos, Vec(20, 20, 20))
+    for i=1, #list do
 
+        local shape = list[i]
+        local shapeTransform = GetShapeWorldTransform(shape)
 
-    if withinCylinder(gv.startPos, gv.endPos, gv.radius, GetPlayerTransform().pos) then
-
-        gv.objectIsInBounds = true -- true while player is in gv bounds
-
-        if gv.objectIsInBounds then -- player is in the y bounds
-
-            if gv.objectJustEnteredBounds == false then 
-                gv.objectJustEnteredBounds = true -- trigger for player bump up
-                gv.objectBumpUp() -- move the player 0.1 voxel up to make SetVelocity() work
-            end
-
-            SetPlayerVelocity(gv.getDirectionalVelocity())-- updaward velocity now works
+        if withinCylinder(gv.startPos, gv.endPos, gv.radius, shapeTransform.pos) then
+            DebugPrint("Shapes in area: " .. i .. " - " .. GetTime())
+            SetBodyVelocity(GetShapeBody(shape), gv.getDirectionalVelocity()) -- directional velocity
         end
-    else -- player is not in bounds, reset bounds values
-        gv.objectIsInBounds = false
-        gv.objectJustEnteredBounds = false
     end
 
+
+    local outerRadius = {
+        left    = TransformToParentPoint(gv.getBaseTransform(), Vec(0,gv.radius,0)),
+        right   =  TransformToParentPoint(gv.getBaseTransform(), Vec(gv.radius,0,0)),
+        top     =  TransformToParentPoint(gv.getBaseTransform(), Vec(-gv.radius,0,0)),
+        bottom  =  TransformToParentPoint(gv.getBaseTransform(), Vec(0,-gv.radius,0)),
+    }
+    local outerRadiusEnd = {
+        left    = TransformToParentPoint(gv.getBaseTransform(), Vec(0,gv.radius,-gv.distance)),
+        right   =  TransformToParentPoint(gv.getBaseTransform(), Vec(gv.radius,0,-gv.distance)),
+        top     =  TransformToParentPoint(gv.getBaseTransform(), Vec(-gv.radius,0,-gv.distance)),
+        bottom  =  TransformToParentPoint(gv.getBaseTransform(), Vec(0,-gv.radius,-gv.distance)),
+    }
+    db.l(outerRadius.left, outerRadiusEnd.left, colors.yellow)
+    db.l(outerRadius.right, outerRadiusEnd.right, colors.yellow)
+    db.l(outerRadius.top, outerRadiusEnd.top, colors.red)
+    db.l(outerRadius.bottom, outerRadiusEnd.bottom, colors.yellow)
+    
+    db.l(gv.startPos, outerRadius.left, colors.yellow)
+    db.l(gv.startPos, outerRadius.right, colors.yellow)
+    db.l(gv.startPos, outerRadius.top, colors.red)
+    db.l(gv.startPos, outerRadius.bottom, colors.yellow) -- fwd
+
+    db.l(gv.startPos, gv.endPos, colors.green)
+    db.l(gv.startPos, GetPlayerPos(), colors.white)
+end
+
+function drawGvOutline(gv)
     local outerRadius = {
         left    = TransformToParentPoint(gv.getBaseTransform(), Vec(0,gv.radius,0)),
         right   =  TransformToParentPoint(gv.getBaseTransform(), Vec(gv.radius,0,0)),
@@ -127,17 +140,15 @@ function runGravlift(gv)
 
     db.l(gv.startPos, gv.endPos, colors.green)
     db.l(gv.startPos, GetPlayerPos(), colors.white)
-
-
-    -- db.l(result, GetPlayerPos(), colors.blue)
-    -- db.l(point1, GetPlayerPos(), colors.black)
-end
-
-function drawGvOutline()
 end
 
 function tick()
     runGravlift(_gv)
+
+    
+    drawLines()
+
+
 end
 
 
