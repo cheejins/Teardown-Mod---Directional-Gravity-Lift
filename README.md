@@ -4,6 +4,7 @@ Features user-friendly setup and configurations done purely through the map's XM
 <br>
 
 Development Log
+* main - 0.11 - Added cylinder wireframe and xml linked values
 * main - 0.10 - Reincorporated player into gravlift
 * main - 0.9 -- AABBs vectors and dimensions correct
 * main - 0.8 -- AABBs now dynamically adapt their dimensions to the gravlift bounds and radius
