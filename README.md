@@ -4,6 +4,8 @@ Features user-friendly setup and configurations done purely through the map's XM
 <br>
 
 Development Log
+* main - 0.13 - Added XML options bindings
+* main - 0.12 - Added ring animations for gravlift bounds
 * main - 0.11 - Added cylinder wireframe and xml linked values
 * main - 0.10 - Reincorporated player into gravlift
 * main - 0.9 -- AABBs vectors and dimensions correct
