@@ -1,6 +1,8 @@
 # Teardown Mod - Directional Gravity Lift
 Features user-friendly setup and configurations done purely through the map's XML config.
 
+https://teardownmods.com/index.php?/file/845-directional-gravity-lifts-easy-xml-setup-for-your-maps/
+
 <br>
 
 Development Log
